@@ -1,0 +1,46 @@
+{
+  "ffmpeg": {
+    "timeout": 0,
+    "ffmpeg.threads": 8,
+    "temporary_directory": "/tmp/streaming",
+    "watermark": "/path/to/watermark.png"
+  },
+  "platforms": [
+    {
+      "name": "youtube",
+      "rtmp_url": "rtmp://a.rtmp.youtube.com/live2/YOUR_STREAM_KEY",
+      "resolution": "1920x1080",
+      "video_bitrate": 4000,
+      "audio_bitrate": 128,
+      "preset": "fast",
+      "keyframe_interval": 60
+    },
+    {
+      "name": "twitch",
+      "rtmp_url": "rtmp://live.twitch.tv/app/YOUR_STREAM_KEY",
+      "resolution": "1920x1080",
+      "video_bitrate": 3500,
+      "audio_bitrate": 160,
+      "preset": "veryfast",
+      "keyframe_interval": 60
+    },
+    {
+      "name": "facebook",
+      "rtmp_url": "rtmps://live-api-s.facebook.com:443/rtmp/YOUR_STREAM_KEY",
+      "resolution": "1280x720",
+      "video_bitrate": 2500,
+      "audio_bitrate": 128,
+      "preset": "fast",
+      "keyframe_interval": 60
+    },
+    {
+      "name": "bilibili",
+      "rtmp_url": "rtmp://live-push.bilivideo.com/live-bvc/YOUR_STREAM_KEY",
+      "resolution": "1920x1080",
+      "video_bitrate": 3000,
+      "audio_bitrate": 128,
+      "preset": "fast",
+      "keyframe_interval": 60
+    }
+  ]
+}

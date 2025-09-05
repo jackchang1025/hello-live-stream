@@ -1,0 +1,28 @@
+# 测试专用的 Dockerfile
+FROM sail-8.3/app:latest
+
+# 安装系统依赖
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    git \
+    unzip \
+    libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# 设置工作目录
+WORKDIR /app
+
+# 复制项目文件
+COPY . .
+
+# 安装依赖
+RUN composer install --no-interaction --prefer-dist
+
+# 验证 FFmpeg 安装
+RUN ffmpeg -version
+
+# 默认命令
+# CMD ["./vendor/bin/pest"]

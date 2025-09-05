@@ -1,0 +1,16 @@
+{
+  "require": {
+    "alibabacloud/sdk": "^1.8",
+    "alibabacloud/nls-filetrans-20180817": "^1.0",
+    "alibabacloud/oss-sdk-php": "^2.6",
+    "guzzlehttp/guzzle": "^7.0",
+    "monolog/monolog": "^3.0"
+  },
+  "scripts": {
+    "install-speech": [
+      "composer require alibabacloud/sdk",
+      "composer require alibabacloud/nls-filetrans-20180817", 
+      "composer require alibabacloud/oss-sdk-php"
+    ]
+  }
+}

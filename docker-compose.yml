@@ -1,0 +1,13 @@
+services:
+  php-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - .:/app
+    working_dir: /app
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+      - WWWUSER=1000
+      - WWWGROUP=1000
+    command: bash

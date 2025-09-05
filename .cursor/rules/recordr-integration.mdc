@@ -1,0 +1,19 @@
+---
+description: Recordr 连接器与录制流程的使用规范
+---
+# Recordr 集成规范
+
+- **入口类**：`Recording\RecordrConnector`（见 [src/Recording/RecordrConnector.php](mdc:src/Recording/RecordrConnector.php)）。
+- **标准流程**：
+  1) 由 `PlatformFactory` 解析得到 `PlatformInterface` 实例
+  2) 创建 `RecordrConnector`，通过 `withConfig($options)` 注入 `RecordingOptions`/数组配置
+  3) 通过 `middleware()->pipe(...)` 注册校验或信息增强 pipe（默认包含 `ValidateOptionsPipe`）
+  4) 调用 `handle($platform, ?Closure $progress)` 启动录制
+- **进度回调**：`$progress` 签名示例见 [examples/RecordrConnector.php](mdc:examples/RecordrConnector.php) 中的 `function (string $type, string $buffer)`，用于接收底层 FFmpeg/Recordr 输出。
+- **中间件建议**：
+  - 校验保存路径、输出格式与质量选项
+  - 输出 `RoomInfo`、`RecordUrl` 等上下文信息，便于排障
+- **注意事项**：
+  - 传入的 pipe 请使用闭包或对象实例
+  - 在 `handle()` 中的最终闭包会调用 `recordr()->start(pendingRecorder: ..., progress: $progress)`，请确保配置完整
+  - 平台实例需正确提供房间信息与可录制的流地址（M3U8/FLV）

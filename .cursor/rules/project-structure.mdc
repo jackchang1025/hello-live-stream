@@ -1,0 +1,26 @@
+---
+alwaysApply: true
+---
+# 项目结构与导航
+
+- **核心库代码**: `src/`
+  - `Pipeline` 管道实现：[src/Pipeline.php](mdc:src/Pipeline.php)
+  - 平台工厂与平台解析：[src/PlatformFactory.php](mdc:src/PlatformFactory.php)
+  - 录制连接器（Recordr 入口）：[src/Recording/RecordrConnector.php](mdc:src/Recording/RecordrConnector.php)
+- **示例与工具**: `examples/`
+  - FFmpeg 流媒体处理 CLI 示例：[examples/streaming-processor.php](mdc:examples/streaming-processor.php)
+  - Recordr 使用示例（含进度与中间件演示）：[examples/RecordrConnector.php](mdc:examples/RecordrConnector.php)
+- **运行环境**
+  - Docker 运行定义：[docker-compose.yml](mdc:docker-compose.yml)
+
+## 典型调用流
+- 平台解析：通过 `PlatformFactory::createPlatform(string $url)` 根据 URL 匹配具体平台实现。
+- 录制流程：使用 `Recording\RecordrConnector::handle(PlatformInterface $platform, ?Closure $progress)` 组装 `PendingRecorder`，应用中间件，最终调用底层 `recordr()->start(...)` 启动录制。
+- 管道（中间件）模型：`Pipeline` 以 "洋葱模型" 依次调用 `pipe`，每个 pipe 需要 `handle($passable, Closure $next)` 签名。
+
+## 扩展点概览
+- 新平台接入：实现 `Contracts\PlatformInterface`，在 `PlatformFactory` 增加 URL 识别与实例化逻辑。
+- 新录制前置校验或注入：编写管道 `pipe` 并通过 `RecordrConnector->middleware()->pipe(...)` 注册。
+- 示例 CLI 扩展：在 `examples/streaming-processor.php` 中新增子命令或输出配置。
+
+> 注意：`Pipeline` 当前未接入容器解析字符串管道（`parsePipeString` 仅解析参数，未 make 实例），请优先传递“闭包或已实例化对象”作为 pipe。

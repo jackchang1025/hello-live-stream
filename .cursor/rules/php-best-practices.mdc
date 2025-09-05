@@ -1,0 +1,291 @@
+---
+alwaysApply: true
+---
+
+# PHP 软件开发规范
+
+本规范旨在为 PHP 项目提供一套统一的编码标准和最佳实践，以提高代码质量、可读性和可维护性。
+
+要求学习 laravel 的工匠精神来构建可维护，方便测试，代码优雅，简洁
+
+## 1. 编码标准
+
+-   **PSR-12**: 所有 PHP 代码必须遵循 [PSR-12 (Extended Coding Style)](https://www.php-fig.org/psr/psr-12/) 规范。这是 PHP 社区广泛接受的标准，统一了代码格式。
+-   **自动格式化**: 建议在项目中配置 [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) 或 [Laravel Pint](https://laravel.com/docs/pint) (在 Laravel 项目中) 来自动强制执行代码风格。
+
+## 2. 严格类型
+
+-   **启用严格模式**: 在每个 PHP 文件的开头，都应该使用 `declare(strict_types=1);` 来启用严格类型模式。这可以防止许多由于类型转换引发的隐蔽错误。
+
+## 3. 命名约定
+
+-   **类 (Classes)**: `PascalCase` (大驼峰命名法)。例如: `MyClass`。
+-   **常量 (Constants)**: `UPPER_CASE_WITH_UNDERSCORES` (大写下划线命名法)。例如: `MY_CONSTANT`。
+-   **方法和函数 (Methods & Functions)**: `camelCase` (小驼峰命名法)。例如: `myFunction`。
+-   **变量 (Variables)**: `camelCase` (小驼峰命名法)。例如: `$myVariable`。
+
+## 4. 类型提示 (Type Hinting)
+
+-   **函数/方法参数**: 必须为所有参数添加类型提示。
+-   **返回值**: 必须为所有函数和方法添加返回类型提示。
+-   **PHP 7.4+**: 鼓励使用类属性的类型提示。
+
+## 5. 面向对象编程 (OOP) 原则
+
+### 5.1 SOLID 原则
+
+-   **单一职责原则 (SRP)**: 每个类只应有一个改变的理由，专注于单一功能。
+-   **开闭原则 (OCP)**: 类应该对扩展开放，对修改关闭。使用接口和抽象类来实现。
+-   **里氏替换原则 (LSP)**: 子类必须能够替换其基类而不破坏程序功能。
+-   **接口隔离原则 (ISP)**: 客户端不应该依赖它不使用的接口方法。
+-   **依赖倒置原则 (DIP)**: 高层模块不应依赖低层模块，两者都应依赖抽象。
+
+### 5.2 设计模式
+
+-   **优先使用组合而非继承**: 通过组合来实现代码复用，增加灵活性。
+-   **使用工厂模式**: 当对象创建逻辑复杂时，使用工厂模式封装创建逻辑。
+-   **策略模式**: 当有多种算法可以完成同一任务时，使用策略模式。
+-   **观察者模式**: 用于实现事件驱动的架构。
+
+## 6. 代码简洁性 (Clean Code)
+
+### 6.1 函数和方法
+
+-   **保持函数简短**: 一个函数应该只做一件事，通常不超过 20 行。
+-   **有意义的命名**: 函数名应该清楚地表达其功能，避免使用缩写。
+-   **减少参数数量**: 函数参数不应超过 3-4 个，考虑使用对象封装多个参数。
+-   **避免深层嵌套**: 使用早期返回 (early return) 来减少嵌套层级。
+
+### 6.2 变量和常量
+
+-   **使用有意义的变量名**: 变量名应该自解释，避免使用 `$data`、`$info` 等模糊名称。
+-   **避免魔法数字**: 使用命名常量代替硬编码的数字。
+-   **最小化变量作用域**: 在最接近使用的地方声明变量。
+
+## 7. 可维护性 (Maintainability)
+
+### 7.1 代码组织
+
+-   **遵循 PSR-4 自动加载标准**: 确保类文件的组织结构清晰。
+-   **逻辑分层**: 将业务逻辑、数据访问和表现层分离。
+-   **使用命名空间**: 合理使用命名空间来组织代码，避免类名冲突。
+
+### 7.2 依赖管理
+
+-   **使用依赖注入**: 通过构造函数或方法注入依赖，而不是在类内部创建。
+-   **使用容器**: 在复杂项目中使用 DI 容器来管理依赖关系。
+-   **避免全局状态**: 最小化对全局变量和静态方法的使用。
+
+```php
+// 好的示例：依赖注入
+class UserController
+{
+    public function __construct(
+        private UserService $userService,
+        private ValidationService $validator
+    ) {}
+}
+```
+
+## 8. 可扩展性 (Extensibility)
+
+### 8.1 接口和抽象
+
+-   **面向接口编程**: 依赖接口而非具体实现，便于后续扩展。
+-   **使用抽象类**: 为相关类提供公共基础实现。
+-   **避免紧耦合**: 类之间应该松耦合，便于独立修改和测试。
+
+### 8.2 配置管理
+
+-   **外部化配置**: 将配置信息从代码中分离出来。
+-   **环境特定配置**: 为不同环境（开发、测试、生产）提供不同配置。
+-   **使用配置对象**: 将相关配置组织成配置类。
+
+## 11. 文档注释 (PHPDoc)
+
+-   **PHPDoc**: 所有类、方法、函数都应包含符合 [PHPDoc](https://phpdoc.org/) 标准的文档块。
+-   **描述清晰**: 注释应该清晰地描述其功能、参数和返回值。
+## 12. 现代 PHP 特性
+
+-   **使用新特性**: 鼓励使用 PHP 7 和 PHP 8 引入的现代语言特性，例如：
+
+    -   Null Coalescing Operator (`??`)
+    -   Arrow Functions (`fn () => ...`)
+    -   Constructor Property Promotion
+    -   Named Arguments
+    -   Match Expressions
+    -   Union Types (`string|int`)
+    -   Readonly Properties
+    -   Enums (PHP 8.1+)
+
+    -   Constructor Property Promotion
+    -   Named Arguments
+    -   Match Expressions
+# PHP 软件开发规范
+
+本规范旨在为 PHP 项目提供一套统一的编码标准和最佳实践，以提高代码质量、可读性和可维护性。
+
+## 1. 编码标准
+
+-   **PSR-12**: 所有 PHP 代码必须遵循 [PSR-12 (Extended Coding Style)](https://www.php-fig.org/psr/psr-12/) 规范。这是 PHP 社区广泛接受的标准，统一了代码格式。
+-   **自动格式化**: 建议在项目中配置 [PHP-CS-Fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) 或 [Laravel Pint](https://laravel.com/docs/pint) (在 Laravel 项目中) 来自动强制执行代码风格。
+
+## 2. 严格类型
+
+-   **启用严格模式**: 在每个 PHP 文件的开头，都应该使用 `declare(strict_types=1);` 来启用严格类型模式。这可以防止许多由于类型转换引发的隐蔽错误。
+
+## 3. 命名约定
+
+-   **类 (Classes)**: `PascalCase` (大驼峰命名法)。例如: `MyClass`。
+-   **常量 (Constants)**: `UPPER_CASE_WITH_UNDERSCORES` (大写下划线命名法)。例如: `MY_CONSTANT`。
+-   **方法和函数 (Methods & Functions)**: `camelCase` (小驼峰命名法)。例如: `myFunction`。
+-   **变量 (Variables)**: `camelCase` (小驼峰命名法)。例如: `$myVariable`。
+
+## 4. 类型提示 (Type Hinting)
+
+-   **函数/方法参数**: 必须为所有参数添加类型提示。
+-   **返回值**: 必须为所有函数和方法添加返回类型提示。
+-   **PHP 7.4+**: 鼓励使用类属性的类型提示。
+
+## 5. 面向对象编程 (OOP) 原则
+
+### 5.1 SOLID 原则
+
+-   **单一职责原则 (SRP)**: 每个类只应有一个改变的理由，专注于单一功能。
+-   **开闭原则 (OCP)**: 类应该对扩展开放，对修改关闭。使用接口和抽象类来实现。
+-   **里氏替换原则 (LSP)**: 子类必须能够替换其基类而不破坏程序功能。
+-   **接口隔离原则 (ISP)**: 客户端不应该依赖它不使用的接口方法。
+-   **依赖倒置原则 (DIP)**: 高层模块不应依赖低层模块，两者都应依赖抽象。
+
+### 5.2 设计模式
+
+-   **优先使用组合而非继承**: 通过组合来实现代码复用，增加灵活性。
+-   **使用工厂模式**: 当对象创建逻辑复杂时，使用工厂模式封装创建逻辑。
+-   **策略模式**: 当有多种算法可以完成同一任务时，使用策略模式。
+-   **观察者模式**: 用于实现事件驱动的架构。
+
+## 6. 代码简洁性 (Clean Code)
+
+### 6.1 函数和方法
+
+-   **保持函数简短**: 一个函数应该只做一件事，通常不超过 20 行。
+-   **有意义的命名**: 函数名应该清楚地表达其功能，避免使用缩写。
+-   **减少参数数量**: 函数参数不应超过 3-4 个，考虑使用对象封装多个参数。
+-   **避免深层嵌套**: 使用早期返回 (early return) 来减少嵌套层级。
+
+### 6.2 变量和常量
+
+-   **使用有意义的变量名**: 变量名应该自解释，避免使用 `$data`、`$info` 等模糊名称。
+-   **避免魔法数字**: 使用命名常量代替硬编码的数字。
+-   **最小化变量作用域**: 在最接近使用的地方声明变量。
+
+## 7. 可维护性 (Maintainability)
+
+### 7.1 代码组织
+
+-   **遵循 PSR-4 自动加载标准**: 确保类文件的组织结构清晰。
+-   **逻辑分层**: 将业务逻辑、数据访问和表现层分离。
+-   **使用命名空间**: 合理使用命名空间来组织代码，避免类名冲突。
+
+### 7.2 依赖管理
+
+-   **使用依赖注入**: 通过构造函数或方法注入依赖，而不是在类内部创建。
+-   **使用容器**: 在复杂项目中使用 DI 容器来管理依赖关系。
+-   **避免全局状态**: 最小化对全局变量和静态方法的使用。
+
+```php
+// 好的示例：依赖注入
+class UserController
+{
+    public function __construct(
+        private UserService $userService,
+        private ValidationService $validator
+    ) {}
+}
+```
+
+## 8. 可扩展性 (Extensibility)
+
+### 8.1 接口和抽象
+
+-   **面向接口编程**: 依赖接口而非具体实现，便于后续扩展。
+-   **使用抽象类**: 为相关类提供公共基础实现。
+-   **避免紧耦合**: 类之间应该松耦合，便于独立修改和测试。
+
+### 8.2 配置管理
+
+-   **外部化配置**: 将配置信息从代码中分离出来。
+-   **环境特定配置**: 为不同环境（开发、测试、生产）提供不同配置。
+-   **使用配置对象**: 将相关配置组织成配置类。
+
+## 11. 文档注释 (PHPDoc)
+
+-   **PHPDoc**: 所有类、方法、函数都应包含符合 [PHPDoc](https://phpdoc.org/) 标准的文档块。
+-   **描述清晰**: 注释应该清晰地描述其功能、参数和返回值。
+## 12. 现代 PHP 特性
+
+-   **使用新特性**: 鼓励使用 PHP 7 和 PHP 8 引入的现代语言特性，例如：
+
+    -   Null Coalescing Operator (`??`)
+    -   Arrow Functions (`fn () => ...`)
+    -   Constructor Property Promotion
+    -   Named Arguments
+    -   Match Expressions
+    -   Union Types (`string|int`)
+    -   Readonly Properties
+    -   Enums (PHP 8.1+)
+
+    -   Constructor Property Promotion
+    -   Named Arguments
+    -   Match Expressions
+
+## 13. Laravel 架构实践要点（基于 Framework、Cache、Broadcasting）
+
+### 13.1 设计模式（Patterns）
+
+-   **工厂模式（Factory）**: 统一创建与管理实例，基于配置驱动选择实现。
+    -   典型：`BroadcastManager` 按连接名创建广播器；`CacheManager` 按 store 名创建缓存驱动；容器 `Container` 解析/构建依赖。
+-   **策略模式（Strategy）**: 在统一契约下切换算法/实现。
+    -   典型：缓存 `Store` 实现（File/Redis/Database/Memcached/Array/DynamoDb）；广播器（Pusher/Redis/Ably/自定义）。
+-   **装饰器模式（Decorator）**: 在不改变底层接口的前提下分层增强功能。
+    -   典型：缓存 `Repository`/`TaggedCache` 为 `Store` 增加事件、标签、便捷 API；`BroadcastEvent` 装饰领域事件以支持队列与多连接广播。
+-   **模板方法模式（Template Method）**: 在抽象基类中定义流程骨架，子类实现步骤。
+    -   典型：`Cache\Lock` 统一获取/释放/阻塞流程；`Broadcasting\Broadcasters\Broadcaster` 统一频道认证和广播处理流程。
+-   **管道模式（Pipeline）**: 洋葱模型串联处理器，支持中间件式扩展与早返回。
+    -   典型：`Illuminate\Pipeline\Pipeline`；HTTP/控制台中间件；可用于业务处理链。
+-   **观察者模式（Observer）**: 事件发布-订阅解耦业务。
+    -   典型：`Events\Dispatcher`；广播把服务器事件推送给前端客户端。
+-   **建造者模式（Builder）**: 以流式链式 API 构建复杂对象/查询/发送动作。
+    -   典型：查询构建器；`PendingBroadcast`、`Channel`/`PrivateChannel`/`PresenceChannel` 的组合。
+-   **空对象模式（Null Object）**: 提供安全的“什么也不做”的实现，消除空判分支。
+    -   典型：`NullStore`、`NoLock`、`NullBroadcaster`。
+-   **仓储模式（Repository）**: 作为领域与数据/驱动之间的桥梁，统一 API 并封装复杂性。
+    -   典型：缓存 `Repository` 聚合事件、锁与便捷方法。
+
+### 13.2 SOLID 原则的体现
+
+-   **SRP 单一职责**: `Container` 专注依赖解析；`Dispatcher` 专注事件分发；`Pipeline` 专注管道编排；`CacheManager` 负责驱动创建；`Repository` 负责缓存仓储；各 `Lock` 实现仅管锁行为。
+-   **OCP 开闭原则**: 通过契约（Contracts）与抽象类扩展而不修改；新增缓存驱动/广播器仅需实现接口并在管理器中注册。
+-   **LSP 里氏替换**: 任何 `Store`/`Broadcaster` 实现都可在依赖其抽象的调用方处透明替换。
+-   **ISP 接口隔离**: 将大接口拆分为小而专的契约，如 `Factory`、`Store`、`LockProvider`、`Broadcaster`、`ShouldBroadcast` 等，调用方只依赖所需能力。
+-   **DIP 依赖倒置**: 高层依赖抽象（契约）而非具体实现，依赖注入由容器完成；如 `BroadcastEvent` 依赖 `BroadcastingFactory`，`CacheManager` 接收 `Store` 抽象并包装为 `Repository`。
+
+### 13.3 扩展性设计（Extensibility）
+
+-   **配置驱动扩展**: 通过 `config` 选择驱动/连接，支持 `extend()` 注册自定义缓存/广播驱动，实现零侵入替换。
+-   **服务容器与服务提供者**: 在 `ServiceProvider` 中绑定接口到实现、注册单例，将对象创建与生命周期外置，便于测试与替换。
+-   **事件与中间件扩展点**: 利用事件（缓存命中/未命中/写入/删除、广播认证/发送）与中间件（认证、限流、审计）无缝加入横切关注点。
+-   **标签与命名空间**: 使用 `TaggedCache` 管理分组与批量失效，必要时扩展层级标签命名空间策略以实现精细化失效。
+-   **分布式锁能力**: 依据存储实现锁（Redis/DB/File/Memcached），支持阻塞、续期与重试等策略以保障一致性。
+-   **多级缓存与回填**: 组合 L1（内存）+ L2（Redis）+ L3（DB）策略，命中回填上层，提升读性能与稳定性。
+-   **频道与路由扩展**: 自定义频道命名/路由（如模型频道），在认证链路中加入权限与租户隔离逻辑。
+-   **队列与重试策略**: 广播事件可配置 `tries`、`timeout`、`backoff`、`maxExceptions`，在高峰/故障时保持可恢复性。
+-   **宏/可组合能力**: 通过宏（如 `Macroable`）与构建器扩展，安全地为集合/仓储/领域对象增加便捷方法。
+
+### 13.4 实践建议（Actionable Guidelines）
+
+-   **面向契约与组合优先**: 所有新能力优先设计接口；通过组合（装饰器/管道）叠加功能而非继承层层堆叠。
+-   **将创建逻辑收敛到管理器/工厂**: 新的外部集成（如缓存/广播/平台）以管理器 + `extend()` 方式接入，避免散落的 `new`。
+-   **用事件/管道解耦流程**: 复杂业务链路拆分为可测试的中间件与事件监听器，关注点分离、易于扩展。
+-   **可观测性内置**: 为关键操作触发事件与指标埋点（命中率、未命中、写入失败、广播失败），便于故障定位与容量规划。
+-   **一致性与回退策略**: 对跨进程竞争使用锁；对外部依赖提供超时、重试与降级（空对象/日志驱动）。

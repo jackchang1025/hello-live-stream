@@ -1,0 +1,31 @@
+---
+description: Pipeline 与平台工厂的用法与约束
+---
+# 流水线与平台解析规则
+
+## Pipeline 用法
+- **核心方法**：
+  - `send($passable)` 设置被传递对象
+  - `through($pipes)`/`pipe($pipes)` 注册管道（闭包或对象实例）
+  - `via($method)` 自定义管道调用方法名（默认 `handle`）
+  - `then(Closure $destination)` 触发执行；异常会向上抛出；`finally(Closure)` 无论成功失败均执行
+- **异常与收尾**：`then` 内部 `try/finally`，若设置了 `finally`，会以最终 `passable` 调用（见 [src/Pipeline.php](mdc:src/Pipeline.php)）。
+- **字符串管道**：目前不会自动从容器解析，请避免传字符串；改用闭包或已实例化对象。
+
+### 自定义 pipe 示范
+```php
+$connector->middleware()->pipe(
+    function (PendingRecorder $pending, Closure $next) {
+        // 校验/改写 $pending
+        return $next($pending);
+    }
+);
+```
+
+## 平台工厂规则
+- 在 `PlatformFactory::createPlatform(string $url)` 内依据 URL 正则选择平台实现（例如抖音：`live.douyin.com` / `v.douyin.com`）。
+- 新增平台时：
+  1) 定义 `Platforms\\{Name}\\{Name}Platform` 实现 `Contracts\\PlatformInterface`
+  2) 准备对应 `Connector`（如 `DouyinConnector`）
+  3) 在工厂中添加 URL 识别与实例化（见 [src/PlatformFactory.php](mdc:src/PlatformFactory.php)）
+- 未识别 URL 时抛出 `PlatformException` 并附带来源信息。

@@ -1,0 +1,15 @@
+---
+globs: *.php
+---
+# PHP 编码与项目特定约定
+
+- **严格类型**: 每个 PHP 文件首行启用 `declare(strict_types=1);`（示例见 [src/PlatformFactory.php](mdc:src/PlatformFactory.php)、[src/Recording/RecordrConnector.php](mdc:src/Recording/RecordrConnector.php)）。
+- **PSR-12**: 统一风格、命名与文件组织，使用 `PascalCase` 类名、`camelCase` 方法/变量名；`UPPER_CASE` 常量。
+- **类型提示**: 为所有参数与返回值添加类型（包含 `Closure` 参数）；避免 `mixed`；必要时使用联合类型。
+- **命名空间**: 根命名空间为 `LiveStream`；子域按目录组织，如 `LiveStream\Recording`、`LiveStream\Platforms`。
+- **异常处理**: 管道与收尾逻辑中仅在必要处捕获；`Pipeline->then()` 已统一 try/finally，异常向上传递（参考 [src/Pipeline.php](mdc:src/Pipeline.php)）。
+- **函数粒度**: 单一职责，短小函数优先；尽量早返回降低嵌套层级。
+- **中间件签名**: 管道 pipe 实现应提供 `handle($passable, Closure $next): mixed`；闭包 pipe 签名为 `function ($passable, Closure $next): mixed`。
+- **管道入参**: 传闭包或对象实例，不传类名字符串（当前未自动 make）。
+- **Trait 使用**: 通过 `HasMiddleware` 暴露 `middleware()`（见 [src/Recording/RecordrConnector.php](mdc:src/Recording/RecordrConnector.php)）；组合优先于继承。
+- **DocBlock**: 公共 API 与复杂逻辑添加 PHPDoc，描述参数含义与返回值。

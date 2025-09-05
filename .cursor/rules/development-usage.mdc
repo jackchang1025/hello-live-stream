@@ -1,0 +1,30 @@
+---
+description: 本地开发、运行示例与 Docker 使用
+---
+# 开发与运行指南
+
+## 运行示例 CLI
+- 入口脚本：[examples/streaming-processor.php](mdc:examples/streaming-processor.php)
+- 可用命令：
+  - `multi-stream <input> <config.json>` 多平台推流
+  - `record <stream_url> <output> [minutes]` 录制直播
+  - `hls <input> <output_dir>` 生成 HLS
+  - `dash <input> <output_dir>` 生成 DASH
+  - `webcam <device> <rtmp_url>` 摄像头推流
+
+## Docker 快速启动
+- 组合文件：[docker-compose.yml](mdc:docker-compose.yml)
+- 交互进入容器：
+```bash
+docker compose run --rm php-test bash
+```
+- 容器内项目路径：`/app`（挂载自工作区）
+- 执行示例（容器内）：
+```bash
+php examples/streaming-processor.php record "<stream_url>" "/app/downloads/out.mp4" 60
+```
+
+## 开发注意
+- 请确保系统已安装 FFmpeg，或容器内可用。
+- 示例使用 `FFMpeg\FFMpeg` 高阶 API，必要时调整转码参数（码率、GOP、preset、filters）。
+- Windows/WSL2 环境建议优先使用 Docker 以统一依赖。

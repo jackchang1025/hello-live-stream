@@ -1,0 +1,77 @@
+{
+  "name": "your-vendor/live-stream",
+  "description": "A PHP library for live streaming platform data extraction and stream URL parsing",
+  "type": "library",
+  "keywords": [
+    "live-stream",
+    "streaming",
+    "douyin",
+    "tiktok",
+    "kuaishou",
+    "bilibili",
+    "huya",
+    "douyu",
+    "spider",
+    "crawler"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Your Name",
+      "email": "your.email@example.com",
+      "homepage": "https://github.com/your-username"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "ext-pcntl": "*",
+    "alibabacloud/tingwu-20230930": "^2.0",
+    "aliyuncs/oss-sdk-php": "^2.7",
+    "monolog/monolog": "^3.0",
+    "php-ffmpeg/php-ffmpeg": "^1.0",
+    "psr/log": "^3.0",
+    "saloonphp/saloon": "^3.0",
+    "symfony/process": "^6.0",
+    "vlucas/phpdotenv": "^5.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "mockery/mockery": "^1.5",
+    "pestphp/pest": "^3.8",
+    "phpstan/phpstan": "^1.10",
+    "roave/security-advisories": "dev-latest",
+    "squizlabs/php_codesniffer": "^3.7",
+    "symfony/var-dumper": "^7.3"
+  },
+  "suggest": {
+    "swooletw/laravel-swoole": "For async HTTP requests with Swoole",
+    "hyperf/http-client": "For async HTTP requests with Hyperf"
+  },
+  "autoload": {
+    "psr-4": {
+      "LiveStream\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test-coverage": "phpunit --coverage-html coverage",
+    "cs-check": "phpcs",
+    "cs-fix": "phpcbf",
+    "stan": "phpstan analyse",
+    "fix": "php-cs-fixer fix"
+  },
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
